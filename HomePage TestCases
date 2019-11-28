@@ -1,0 +1,91 @@
+package com.tm.qa.testcases;
+import org.openqa.selenium.By;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
+import com.tm.qa.base.BaseClass1;
+import com.tm.qa.pages.HomePage;
+import com.tm.qa.pages.ProfilePage;
+import com.tm.qa.pages.SignInPage;
+import com.tm.qa.pages.SignUpPage;
+import com.tm.qa.util.TestUtils;
+
+public class HomePageTesting extends BaseClass1{
+	
+        HomePage homePage;
+		SignInPage signInPage;
+		SignUpPage signUpPage;
+		ProfilePage profilePage;
+	    TestUtils testUtils; 
+	    SoftAssert softAssert;
+		
+	    
+		public HomePageTesting () {
+			super();
+		}
+		
+		@BeforeMethod
+		public void setting(){
+		initialization();
+		signInPage = new SignInPage();
+		homePage = new HomePage();
+		testUtils= new TestUtils();
+		
+		}
+		
+		@Test (priority=1)
+		public void homePageTitleTest(){
+			String homePagetitle = homePage.verifyHomePageTitle();
+			Assert.assertEquals(homePagetitle, "Travel Medicare");
+			
+		}
+		
+		@Test (priority=2)
+		public void homePageImageTest() {
+			homePage.validateTMImage();
+			Assert.assertTrue(homePage.validateTMImage());
+		}
+		@Test (priority=3)
+		public void myTMButtonTest() {
+			String myTMtitle= homePage.myTMlabel().validateSignInPageTitle();
+			Assert.assertEquals(myTMtitle, "Travel Medicare Sign In", "Test Case Result");
+		}
+
+		@Test
+		public void validEmailAndPasswordTest() {
+			driver.get("https://travelmedicare.com");
+			driver.findElement(By.xpath("//a[contains(text(),'My TM')]")).click();
+			driver.findElement(By.name("email")).sendKeys("neal.bhatt100@gmail.com");
+			driver.findElement(By.name("password")).sendKeys("testing100!");
+			driver.findElement(By.xpath("//button[@type='submit']")).click();
+			softAssert.assertAll();
+			
+		}
+		@Test
+		public void becomeAgentBtnTest() {
+			driver.findElement(By.xpath("//a[contains(text(), 'Become an Agent')]")).click();
+			driver.getTitle();
+			Assert.assertEquals("Travel Medicare Sign up", "Travel Meicare Sign up");
+			
+		}
+		
+		@Test
+		public void emailLinkTest() {
+			driver.findElement(By.xpath("//a[contains(text(), 'info@travelmedicare.com')]")).click();
+			softAssert.assertAll();
+		}
+		
+		@Test
+		public void getAQuoteBtnTest() {
+			driver.findElement(By.xpath("//a[@class, 'ti-arrow-right']")).click();
+			softAssert.assertAll();
+		}
+       @AfterMethod
+       public void tearDown() {
+    	   driver.close();
+    	   
+}
+}
